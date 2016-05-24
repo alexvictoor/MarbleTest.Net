@@ -9,7 +9,7 @@ namespace MarbleTest.Net
     public interface ICheck
     {
         void ToBe(string marble, 
-            object values, 
+            object values = null, 
             Exception errorValue = null);
     }
 }

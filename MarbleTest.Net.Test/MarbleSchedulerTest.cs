@@ -83,5 +83,27 @@ namespace MarbleTest.Net.Test
             }).ThrowsAny();
         }
 
+        [Test]
+        public void Should_use_unsubscription_diagram()
+        {
+            var scheduler = new MarbleScheduler();
+            var source = scheduler.CreateHotObservable<string>("---^-a-b-|", new { a = "A", b = "B" });
+            var unsubscribe =                                     "---!";
+            var expected =                                        "--a";
+            scheduler.ExpectObservable(source, unsubscribe).ToBe(expected);
+        }
+
+        [Test]
+        public void Should_expect_subscription_on_a_cold_observable()
+        {
+            var scheduler = new MarbleScheduler();
+            var source = scheduler.CreateColdObservable("---a---b-|");
+            var subs =                                  "^--------!";
+            
+            //source.Subscriptions[0].
+            //scheduler.ExpectSubscription(source, unsubscribe).ToBe(expected);
+        }
+
+
     }
 }

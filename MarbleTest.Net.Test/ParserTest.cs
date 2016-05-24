@@ -101,8 +101,8 @@ namespace MarbleTest.Net.Test
         {
             var result = Parser.ParseMarblesAsSubscriptions("---^---!-");
 
-            Check.That(result.SubscribedFrame).IsEqualTo(30);
-            Check.That(result.UnsubscribedFrame).IsEqualTo(70);
+            Check.That(result.Subscribe).IsEqualTo(30);
+            Check.That(result.Unsubscribe).IsEqualTo(70);
         }
 
         [Test]
@@ -110,8 +110,8 @@ namespace MarbleTest.Net.Test
         {
             var result = Parser.ParseMarblesAsSubscriptions("---^---");
 
-            Check.That(result.SubscribedFrame).IsEqualTo(30);
-            Check.That(result.UnsubscribedFrame).IsEqualTo(int.MaxValue);
+            Check.That(result.Subscribe).IsEqualTo(30);
+            Check.That(result.Unsubscribe).IsEqualTo(int.MaxValue);
         }
 
         [Test]
@@ -119,8 +119,8 @@ namespace MarbleTest.Net.Test
         {
             var result = Parser.ParseMarblesAsSubscriptions("---(^!)---");
 
-            Check.That(result.SubscribedFrame).IsEqualTo(30);
-            Check.That(result.UnsubscribedFrame).IsEqualTo(30);
+            Check.That(result.Subscribe).IsEqualTo(30);
+            Check.That(result.Unsubscribe).IsEqualTo(30);
         }
 
 

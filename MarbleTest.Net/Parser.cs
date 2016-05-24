@@ -13,7 +13,7 @@ namespace MarbleTest.Net
     {
 
 
-        public static SubscriptionLog ParseMarblesAsSubscriptions(string marbles, int frameTimeFactor = 10)
+        public static Subscription ParseMarblesAsSubscriptions(string marbles, int frameTimeFactor = 10)
         {
 
             var len = marbles.Length;
@@ -60,11 +60,11 @@ namespace MarbleTest.Net
 
             if (unsubscriptionFrame < 0)
             {
-                return new SubscriptionLog(subscriptionFrame);
+                return new Subscription(subscriptionFrame);
             }
             else
             {
-                return new SubscriptionLog(subscriptionFrame, unsubscriptionFrame);
+                return new Subscription(subscriptionFrame, unsubscriptionFrame);
             }
         }
 

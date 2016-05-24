@@ -19,12 +19,22 @@ namespace MarbleTest.Net
             _frameTimeFactor = frameTimeFactor;
         }
 
+        public ITestableObservable<string> CreateColdObservable(string marbles)
+        {
+            return CreateColdObservable<string>(marbles);
+        }
+
         public ITestableObservable<T> CreateColdObservable<T>(string marbles,
             object values = null,
             Exception errorValue = null)
         {
             var messages = Parser.ParseMarbles<T>(marbles, values, errorValue, _frameTimeFactor);
             return CreateColdObservable(messages.ToArray());
+        }
+
+        public ITestableObservable<string> CreateHotObservable(string marbles)
+        {
+            return CreateHotObservable<string>(marbles);
         }
 
         public ITestableObservable<T> CreateHotObservable<T>(string marbles,
@@ -43,22 +53,15 @@ namespace MarbleTest.Net
             if (unsubscriptionMarbles != null)
             {
                 unsubscriptionFrame 
-                    = Parser.ParseMarblesAsSubscriptions(unsubscriptionMarbles, _frameTimeFactor).UnsubscribedFrame;                    
+                    = Parser.ParseMarblesAsSubscriptions(unsubscriptionMarbles, _frameTimeFactor).Unsubscribe;                    
             }
-            IDisposable subscription = null;
-            //Schedule((object)null, (scheduler, state) =>
-            //{
-                Console.Out.WriteLine("clock " + Clock);
-                subscription = observable.Subscribe(x =>
-                {
-                    object value = x;
-                    actual.Add(new Recorded<Notification<object>>(Clock, Notification.CreateOnNext(value)));
-                },
-                (error) => actual.Add(new Recorded<Notification<object>>(Clock, Notification.CreateOnError<object>(error))),
-                () => actual.Add(new Recorded<Notification<object>>(Clock, Notification.CreateOnCompleted<object>())));
-
-              //  return Disposable.Empty;
-            //});
+            IDisposable subscription = observable.Subscribe(x =>
+            {
+                object value = x;
+                actual.Add(new Recorded<Notification<object>>(Clock, Notification.CreateOnNext(value)));
+            },
+            (error) => actual.Add(new Recorded<Notification<object>>(Clock, Notification.CreateOnError<object>(error))),
+            () => actual.Add(new Recorded<Notification<object>>(Clock, Notification.CreateOnCompleted<object>())));
 
             if (unsubscriptionFrame != long.MaxValue)
             {
@@ -85,7 +88,7 @@ namespace MarbleTest.Net
                 _frameTimeFactor = frameTimeFactor;
             }
 
-            public void ToBe(string marble, object values, Exception errorValue = null)
+            public void ToBe(string marble, object values, Exception errorValue)
             {
                 _flushTest.Ready = true;
                 _flushTest.Expected = Parser.ParseMarbles<object>(marble, values, errorValue, _frameTimeFactor, true);
