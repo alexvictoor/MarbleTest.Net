@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MarbleTest.Net
 {
-    public interface ICheck
+    public interface ISetupTest
     {
         void ToBe(string marble, 
             object values = null, 

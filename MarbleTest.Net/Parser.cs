@@ -119,6 +119,13 @@ namespace MarbleTest.Net
                         else
                         {
                             value = GetProperty<T>(values, c.ToString());
+                            if (materializeInnerObservables)
+                            {
+                                if ((typeof(T) == typeof(object)) && ReflectionHelper.IsTestableObservable(value))
+                                {
+                                    value = (T) ReflectionHelper.RetrieveNotificationsFromTestableObservable(value);
+                                } 
+                            }
                         }
                         notification = Notification.CreateOnNext(value);
                         break;
@@ -131,6 +138,21 @@ namespace MarbleTest.Net
                 }
             }
             return testMessages;
+        }
+
+        private static bool IsTestableObservable(object value)
+        {
+            bool result = false;
+            try
+            {
+                GetProperty<object>(value, "Messages");
+                result = true;
+            }
+            catch
+            {
+
+            }
+            return result;
         }
 
         public static T GetProperty<T>(object o, string propName)

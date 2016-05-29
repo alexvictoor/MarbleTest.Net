@@ -123,7 +123,7 @@ namespace MarbleTest.Net.Test
             Check.That(result.Unsubscribe).IsEqualTo(30);
         }
 
-
+        // TODO remove
         public object GetProperty(object o, string propName)
         {
             Type t = o.GetType();

@@ -60,10 +60,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ICheck.cs" />
+    <Compile Include="ISetupSubscriptionsTest.cs" />
+    <Compile Include="ISetupTest.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MarbleScheduler.cs" />
+    <Compile Include="ReflectionHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

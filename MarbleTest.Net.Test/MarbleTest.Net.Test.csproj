@@ -69,6 +69,7 @@
     <Compile Include="ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MarbleSchedulerTest.cs" />
+    <Compile Include="ReflectionHelperTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
