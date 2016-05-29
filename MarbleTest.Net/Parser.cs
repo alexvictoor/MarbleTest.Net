@@ -85,10 +85,15 @@ namespace MarbleTest.Net
             int frameOffset = subIndex == -1 ? 0 : (subIndex * -frameTimeFactor);
 
             long groupStart = -1;
+            long groupOffset = 0;
 
             for (var i = 0; i < len; i++)
             {
-                long frame = i * frameTimeFactor + frameOffset;
+                if (groupStart > -1)
+                {
+                    groupOffset += frameTimeFactor;
+                }
+                long frame = i * frameTimeFactor + frameOffset - groupOffset;
                 Notification<T> notification = null;
                 var c = marbles[i];
                 switch (c)

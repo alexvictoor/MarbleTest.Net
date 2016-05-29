@@ -121,60 +121,6 @@ namespace MarbleTest.Net.Test
             _scheduler.ExpectSubscription(source.Subscriptions).ToBe(subs);
         }
 
-
-        /*
-         * const values = { a: 1, b: 2 };
-        const myObservable = cold('---a---b--|', values);
-        const subs =              '^---------!';
-        expectObservable(myObservable).toBe('---a---b--|', values);
-        expectSubscriptions(myObservable.subscriptions).toBe(subs);
-         */
-
-        [Test]
-        public void Should_test_everything_and_be_awesome()
-        {
-            var values = new {a = 1, b = 2};
-            var source = _scheduler.CreateColdObservable<int>("---a---b--|", values);
-            var subscription = source.Subscribe();
-            _scheduler.ScheduleAbsolute(subscription, 90, (scheduler, sub) =>
-            {
-                sub.Dispose();
-                return Disposable.Empty;
-            });
-            _scheduler.ExpectObservable(source).ToBe("---a---b--|", values);
-            var subs =                                        "^--------!";
-            _scheduler.ExpectSubscription(source.Subscriptions).ToBe(subs);
-        }
-
-        [Test]
-        public void Should_()
-        {
-            var source = _scheduler.CreateColdObservable("---a---b-|");
-            var subs = "^--------!";
-            var disposable = source.Subscribe(n => Console.WriteLine("coucou " + n), () => Console.WriteLine("finito"));
-            _scheduler.ScheduleAbsolute((object)null, 90, (scheduler, st) =>
-            {
-                disposable.Dispose();
-                return Disposable.Empty;
-            });
-            _scheduler.Flush();
-            source.Subscriptions.ToList().ForEach(s => Console.WriteLine("sub " + s));
-            Console.Out.WriteLine("end");
-        }
-
-        /*
-         * it('should support testing metastreams', () => {
-        const x = cold('-a-b|');
-        const y = cold('-c-d|');
-        const myObservable = hot('---x---y----|', { x: x, y: y });
-        const expected =         '---x---y----|';
-        const expectedx = cold('-a-b|');
-        const expectedy = cold('-c-d|');
-        expectObservable(myObservable).toBe(expected, { x: expectedx, y: expectedy });
-      });
-         * 
-         */
-
         [Test]
         public void Should_support_testing_metastreams()
         {
@@ -185,12 +131,20 @@ namespace MarbleTest.Net.Test
             var expectedx = _scheduler.CreateColdObservable("-a-b|");
             var expectedy = _scheduler.CreateColdObservable("-c-d|");
             _scheduler.ExpectObservable(myObservable).ToBe(expected, new { x = expectedx, y = expectedy});
+        }
 
-            IObservable<string> ss = Observable.Return("");
-            var bb = "";
-            Console.Out.WriteLine("toto" + (ss is IObservable<object>));
-            Console.Out.WriteLine("toto" + (bb is IObservable<object>));
+        [Test]
+        public void Should_demo_metastreams_with_windows()
+        {
+            var myObservable = _scheduler.CreateColdObservable("a-b-c-d-|");
+            var result = myObservable.Window(2, 1);
+            var aWindow = _scheduler.CreateColdObservable("a-(b|)");
+            var bWindow = _scheduler.CreateColdObservable("--b-(c|)");
+            var cWindow = _scheduler.CreateColdObservable("--c-(d|)");
+            var dWindow = _scheduler.CreateColdObservable("--d-|");
+            var eWindow = _scheduler.CreateColdObservable("--|");
 
+            _scheduler.ExpectObservable(result).ToBe("(ab)-c-d-e-|", new { a = aWindow, b = bWindow, c = cWindow, d = dWindow, e = eWindow });
         }
 
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,25 @@ namespace MarbleTest.Net
         public MarbleScheduler(int frameTimeFactor = 10)
         {
             _frameTimeFactor = frameTimeFactor;
+        }
+
+        public override IDisposable ScheduleAbsolute<TState>(TState state, long dueTime, Func<IScheduler, TState, IDisposable> action)
+        {
+            bool clockHacked = false;
+            if (dueTime <= Clock)
+            {
+                // Ugly Hack to workaround strange behaviour
+                // and painful visibility keywords in TestScheduler class
+                Clock = Clock - 1;
+                clockHacked = true;
+            }
+                
+            var result = base.ScheduleAbsolute(state, dueTime, action);
+            if (clockHacked)
+            {
+                Clock++;
+            }
+            return result;
         }
 
         public ITestableObservable<string> CreateColdObservable(string marbles)

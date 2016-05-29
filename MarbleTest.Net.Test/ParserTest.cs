@@ -95,7 +95,33 @@ namespace MarbleTest.Net.Test
             });
         }
 
-        // should parse a subscription marble string into a subscriptionLog
+        [Test]
+        public void Should_handle_grouped_values_at_zero_time()
+        {
+            var result = Parser.ParseMarbles<string>("(abc)---");
+
+            Check.That(result).ContainsExactly(new object[]
+            {
+                new Recorded<Notification<string>>(0, Notification.CreateOnNext("a")),
+                new Recorded<Notification<string>>(0, Notification.CreateOnNext("b")),
+                new Recorded<Notification<string>>(0, Notification.CreateOnNext("c"))
+            });
+        }
+
+        [Test]
+        public void Should_handle_value_after_grouped_values()
+        {
+            var result = Parser.ParseMarbles<string>("---(abc)d--");
+
+            Check.That(result).ContainsExactly(new object[]
+            {
+                new Recorded<Notification<string>>(30, Notification.CreateOnNext("a")),
+                new Recorded<Notification<string>>(30, Notification.CreateOnNext("b")),
+                new Recorded<Notification<string>>(30, Notification.CreateOnNext("c")),
+                new Recorded<Notification<string>>(40, Notification.CreateOnNext("d"))
+            });
+        }
+
         [Test]
         public void Should_parse_a_subscription_marble_string_into_a_subscriptionLog()
         {
@@ -123,13 +149,5 @@ namespace MarbleTest.Net.Test
             Check.That(result.Unsubscribe).IsEqualTo(30);
         }
 
-        // TODO remove
-        public object GetProperty(object o, string propName)
-        {
-            Type t = o.GetType();
-            PropertyInfo p = t.GetProperty(propName);
-            object v = p.GetValue(o);
-            return v;
-        }
     }
 }

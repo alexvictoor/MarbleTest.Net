@@ -44,6 +44,9 @@ namespace MarbleTest.Net
             return CastNotificationsFromTestableObservable(messages);
         }
 
+        // Not very proud of this piece of code... if you find a smarter way of transforming 
+        // a IList<Recorded<Notification<T>>> to a IList<Recorded<Notification<object>>>
+        // please share it and send a PR :)
         public static IList<Recorded<Notification<object>>> CastNotificationsFromTestableObservable(IEnumerable messages)
         {
             var result = new List<Recorded<Notification<object>>>();
