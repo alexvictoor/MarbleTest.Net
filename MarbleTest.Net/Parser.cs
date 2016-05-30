@@ -123,7 +123,7 @@ namespace MarbleTest.Net
                         }
                         else
                         {
-                            value = GetProperty<T>(values, c.ToString());
+                            value = ReflectionHelper.GetProperty<T>(values, c.ToString());
                             if (materializeInnerObservables)
                             {
                                 if ((typeof(T) == typeof(object)) && ReflectionHelper.IsTestableObservable(value))
@@ -145,27 +145,5 @@ namespace MarbleTest.Net
             return testMessages;
         }
 
-        private static bool IsTestableObservable(object value)
-        {
-            bool result = false;
-            try
-            {
-                GetProperty<object>(value, "Messages");
-                result = true;
-            }
-            catch
-            {
-
-            }
-            return result;
-        }
-
-        public static T GetProperty<T>(object o, string propName)
-        {
-            Type t = o.GetType();
-            PropertyInfo p = t.GetProperty(propName);
-            object v = p.GetValue(o);
-            return (T)v;
-        }
     }
 }
