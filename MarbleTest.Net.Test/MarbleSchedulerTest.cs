@@ -98,6 +98,15 @@ namespace MarbleTest.Net.Test
         }
 
         [Test]
+        public void Should_demo_with_a_simple_operator()
+        {
+            var sourceEvents = _scheduler.CreateColdObservable("a-b-c-|");
+            var upperEvents = sourceEvents.Select(s => s.ToUpper());
+            _scheduler.ExpectObservable(upperEvents).ToBe("A-B-D-|");
+            _scheduler.Flush();
+        }
+
+        [Test]
         public void Should_use_unsubscription_diagram()
         {
             var source = _scheduler.CreateHotObservable("---^-a-b-|");

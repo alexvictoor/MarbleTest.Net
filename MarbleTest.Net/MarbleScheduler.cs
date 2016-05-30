@@ -184,7 +184,8 @@ namespace MarbleTest.Net
                     if (actualNotification != expectedNotification)
                     {
                         if (actualNotification.Value is IEnumerable 
-                            && expectedNotification.Value is IEnumerable)
+                            && expectedNotification.Value is IEnumerable 
+                            && !(actualNotification.Value is string))
                         {
                             var actualNotifications 
                                 = ReflectionHelper.CastNotificationsFromTestableObservable(
