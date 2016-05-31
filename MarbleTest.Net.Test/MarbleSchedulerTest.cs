@@ -102,7 +102,7 @@ namespace MarbleTest.Net.Test
         {
             var sourceEvents = _scheduler.CreateColdObservable("a-b-c-|");
             var upperEvents = sourceEvents.Select(s => s.ToUpper());
-            _scheduler.ExpectObservable(upperEvents).ToBe("A-B-D-|");
+            _scheduler.ExpectObservable(upperEvents).ToBe("A-B-C-|");
             _scheduler.Flush();
         }
 
