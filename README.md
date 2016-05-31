@@ -10,7 +10,7 @@ The purpose of the library is to help you write as concise an readable tests whe
 
 To get the lib just use nuget as below:
 ```
-PM> Install-Package Marble.Test -Pre
+PM> Install-Package MarbleTest.Net
 ```
 
 ## Usage
