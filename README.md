@@ -32,6 +32,8 @@ var upperEvents = sourceEvents.Select(s => s.ToUpper());            // transform
 scheduler.ExpectObservable(upperEvents).ToBe("A-B-C-|");           // check that the output events have the timing and values as expected
 scheduler.Flush();                                                 // let the virtual clock goes... otherwise nothing happens
 ```
+**Important:** as shown above, do not forget to flush the scheduler at the end of your test case, otherwise no event will be emitted. 
+
 In the above examples, event values are not specified and string streams are produced (i.e. IObservable<string>).  
 As with the RxJS api, you can use a parameter object containing event values:
 ```
@@ -43,10 +45,10 @@ IObservable<int> events = scheduler.CreateHotObservable("a-b-c-|", new { a = 1, 
 
 The syntax remains exactly the same as the one of RxJS.   
 Each ASCII character represents what happens during a time interval, by default 10 ticks.  
-'-' means that nothing happens  
-Any letter means that an event occurs  
-'|' means the stream end successfuly
-'#' means an error occurs
+**'-'** means that nothing happens  
+**'a'** or any letter means that an event occurs  
+**'|'** means the stream end successfully  
+**'#'** means an error occurs
 
 So "a-b-|" means:
 
