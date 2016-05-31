@@ -3,7 +3,8 @@
 # MarbleTest.Net
 
 MarbleTest.Net is a tiny library that allows to write tests for codes based on Rx.Net using marble diagrams in ASCII form.  
-This is a C# port of the [marble test features](https://github.com/ReactiveX/rxjs/blob/master/doc/writing-marble-tests.md) of amazing RxJS v5.
+This is a C# port of the [marble test features](https://github.com/ReactiveX/rxjs/blob/master/doc/writing-marble-tests.md) of amazing RxJS v5.  
+The purpose of the library is to help you write as concise an readable tests when dealing with Rx code. 
 
 ## Quickstart
 
@@ -20,19 +21,28 @@ var scheduler = new MarbleScheduler();
 ``` 
 This scheduler can then be used to configure source observables:
 ```
-var sourceEvents = _scheduler.CreateColdObservable("a-b-c-|");
+var sourceEvents = scheduler.CreateColdObservable("a-b-c-|");
 ```
-Then you can use the **MarbleScheduler.ExpectObservable()** to verify that everything wwent as expected during the test. 
+Then you can use the **MarbleScheduler.ExpectObservable()** to verify that everything went as expected during the test. 
 Below a really simple all-in-one example: 
 ```
-var sourceEvents = _scheduler.CreateColdObservable("a-b-c-|");      // create the input events
+var scheduler = new MarbleScheduler();
+var sourceEvents = _scheduler.CreateColdObservable("a-b-c-|");      // create an IObservable<string> emiting 3 "next" events
 var upperEvents = sourceEvents.Select(s => s.ToUpper());            // transform the events - this is what we often call the SUT ;)
-_scheduler.ExpectObservable(upperEvents).ToBe("A-B-C-|");           // check that the output events have the timing and values as expected
-_scheduler.Flush();                                                 // let the virtual clock goes... otherwise nothing happens
+scheduler.ExpectObservable(upperEvents).ToBe("A-B-C-|");           // check that the output events have the timing and values as expected
+scheduler.Flush();                                                 // let the virtual clock goes... otherwise nothing happens
+```
+In the above examples, event values are not specified and string streams are produced (i.e. IObservable<string>).  
+As with the RxJS api, you can use a parameter object containing event values:
+```
+IObservable<int> events = scheduler.CreateHotObservable("a-b-c-|", new { a = 1, b = 2, c = 3});
 ```
 
+
 ## Marble ASCII syntax
-Each ASCII character represents what happens during 10ms.  
+
+The syntax remains exactly the same as the one of RxJS.   
+Each ASCII character represents what happens during a time interval, by default 10 ticks.  
 '-' means that nothing happens  
 Any letter means that an event occurs  
 '|' means the stream end successfuly
@@ -41,10 +51,16 @@ Any letter means that an event occurs
 So "a-b-|" means:
 
 - At 0, an event 'a' occurs
-- Nothing till 20 where an event 'b' occues
+- Nothing till 20 where an event 'b' occurs
 - Then the stream ends at 40
 
-## Events types
-TODO
-## Features
-TODO
+If some events occurs simultanously, you can group them using paranthesis.  
+So "--(abc)--" means events a, b and c occur at time 20.  
+
+For an exhaustive description of the syntax you can checkout 
+the [official RxJS documentation](https://github.com/ReactiveX/rxjs/blob/master/doc/writing-marble-tests.md)
+
+## Advanced features
+
+For a complete listof supported features you can checkout 
+the [tests of the MarbleScheduler class](https://github.com/alexvictoor/MarbleTest.Net/blob/master/MarbleTest.Net.Test/MarbleSchedulerTest.cs).
