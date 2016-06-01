@@ -37,7 +37,7 @@ scheduler.Flush();                                                 // let the vi
 In the above examples, event values are not specified and string streams are produced (i.e. IObservable<string>).  
 As with the RxJS api, you can use a parameter object containing event values:
 ```
-IObservable<int> events = scheduler.CreateHotObservable("a-b-c-|", new { a = 1, b = 2, c = 3});
+IObservable<int> events = scheduler.CreateHotObservable<int>("a-b-c-|", new { a = 1, b = 2, c = 3});
 ```
 
 
