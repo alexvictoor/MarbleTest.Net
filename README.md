@@ -62,6 +62,25 @@ So "--(abc)--" means events a, b and c occur at time 20.
 For an exhaustive description of the syntax you can checkout 
 the [official RxJS documentation](https://github.com/ReactiveX/rxjs/blob/master/doc/writing-marble-tests.md)
 
+## Test frameworks integration
+There is no coupling with any test framework. For each test case you might need to create a **MarbleScheduler** instance and flush it at the end of the test. 
+With NUnit, or any other test framework, you can redure the amount of boiler plate code as follow:
+```
+private MarbleScheduler _scheduler;
+
+[SetUp]
+public void SetupScheduler()
+{
+    _scheduler = new MarbleScheduler();
+}
+
+[TearDown]
+public void FlushScheduler()
+{
+    _scheduler.Flush();
+}
+```
+
 ## Advanced features
 
 For a complete listof supported features you can checkout 
