@@ -27,12 +27,12 @@ Then you can use the **MarbleScheduler.ExpectObservable()** to verify that every
 Below a really simple all-in-one example: 
 ```
 var scheduler = new MarbleScheduler();
-var sourceEvents = _scheduler.CreateColdObservable("a-b-c-|");      // create an IObservable<string> emiting 3 "next" events
-var upperEvents = sourceEvents.Select(s => s.ToUpper());            // transform the events - this is what we often call the SUT ;)
-scheduler.ExpectObservable(upperEvents).ToBe("A-B-C-|");           // check that the output events have the timing and values as expected
-scheduler.Flush();                                                 // let the virtual clock goes... otherwise nothing happens
+var sourceEvents = scheduler.CreateColdObservable("a-b-c-|"); // create an IObservable<string> emiting 3 "next" events
+var upperEvents = sourceEvents.Select(s => s.ToUpper());      // transform the events - this is what we often call the SUT ;)
+scheduler.ExpectObservable(upperEvents).ToBe("A-B-C-|");      // check that the output events have the timing and values as expected
+scheduler.Flush();                                            // let the virtual clock goes... otherwise nothing happens
 ```
-**Important:** as shown above, do not forget to flush the scheduler at the end of your test case, otherwise no event will be emitted. 
+**Important:** as shown above, do not forget to **Flush** the scheduler at the end of your test case, otherwise no event will be emitted. 
 
 In the above examples, event values are not specified and string streams are produced (i.e. IObservable<string>).  
 As with the RxJS api, you can use a parameter object containing event values:
