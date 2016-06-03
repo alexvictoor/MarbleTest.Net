@@ -145,15 +145,19 @@ namespace MarbleTest.Net.Test
         [Test]
         public void Should_demo_metastreams_with_windows()
         {
-            var myObservable = _scheduler.CreateColdObservable("a-b-c-d-|");
-            var result = myObservable.Window(2, 1);
-            var aWindow = _scheduler.CreateColdObservable("a-(b|)");
-            var bWindow = _scheduler.CreateColdObservable("--b-(c|)");
-            var cWindow = _scheduler.CreateColdObservable("--c-(d|)");
-            var dWindow = _scheduler.CreateColdObservable("--d-|");
-            var eWindow = _scheduler.CreateColdObservable("--|");
+            var input   =                                 "a---b---c---d-|";
+            var myObservable = _scheduler.CreateColdObservable(input);
 
-            _scheduler.ExpectObservable(result).ToBe("(ab)-c-d-e-|", new { a = aWindow, b = bWindow, c = cWindow, d = dWindow, e = eWindow });
+            var result = myObservable.Window(2, 1);
+            
+            var aWindow = _scheduler.CreateColdObservable("a---(b|)");
+            var bWindow = _scheduler.CreateColdObservable("----b---(c|)");
+            var cWindow = _scheduler.CreateColdObservable(    "----c---(d|)");
+            var dWindow = _scheduler.CreateColdObservable(        "----d-|");
+            var eWindow = _scheduler.CreateColdObservable(            "--|");
+
+            var expected = "(ab)c---d---e-|";
+            _scheduler.ExpectObservable(result).ToBe(expected, new { a = aWindow, b = bWindow, c = cWindow, d = dWindow, e = eWindow });
         }
 
 

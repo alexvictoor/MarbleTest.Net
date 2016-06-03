@@ -167,8 +167,8 @@ namespace MarbleTest.Net
                     if (actual[i].Time != expected[i].Time)
                     {
                         throw new Exception(
-                            "Expected event at " + expected[i].Time 
-                            + ", instead received at " + actual[i].Time);
+                            "Expected event \"" + expected[i].Value + "\" at " + expected[i].Time
+                            + ", instead received \"" + actual[i].Value + "\" at " + actual[i].Time);
                     }
 
                     var actualNotification = actual[i].Value;

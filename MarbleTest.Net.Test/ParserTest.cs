@@ -118,7 +118,7 @@ namespace MarbleTest.Net.Test
                 new Recorded<Notification<string>>(30, Notification.CreateOnNext("a")),
                 new Recorded<Notification<string>>(30, Notification.CreateOnNext("b")),
                 new Recorded<Notification<string>>(30, Notification.CreateOnNext("c")),
-                new Recorded<Notification<string>>(40, Notification.CreateOnNext("d"))
+                new Recorded<Notification<string>>(80, Notification.CreateOnNext("d"))
             });
         }
 
