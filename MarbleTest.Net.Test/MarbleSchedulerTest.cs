@@ -53,6 +53,19 @@ namespace MarbleTest.Net.Test
         }
 
         [Test]
+        public void Should_parse_a_simple_time_marble_string_to_a_number()
+        {
+            var time = _scheduler.CreateTime("-----|");
+            Check.That(time).IsEqualTo(TimeSpan.FromTicks(50));
+        }
+
+        [Test]
+        public void Should_throw_if_not_given_good_marble_input()
+        {
+            Check.ThatCode(() => _scheduler.CreateTime("-a-b-c-#")).ThrowsAny();
+        }
+
+        [Test]
         public void Should_expect_empty_observable()
         {
             var scheduler = new MarbleScheduler();

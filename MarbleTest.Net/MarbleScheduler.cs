@@ -66,6 +66,17 @@ namespace MarbleTest.Net
             return CreateHotObservable(messages.ToArray());
         }
 
+        public TimeSpan CreateTime(string marbles)
+        {
+            var endIndex = marbles.IndexOf("|");
+            if (endIndex == -1)
+            {
+                throw new Exception("Marble diagram for time should have a completion marker '|'");
+            }
+            
+            return TimeSpan.FromTicks(endIndex * _frameTimeFactor);
+        }
+
         public ISetupTest ExpectObservable<T>(IObservable<T> observable, string unsubscriptionMarbles = null)
         {
             var actual = new List<Recorded<Notification<object>>>();
