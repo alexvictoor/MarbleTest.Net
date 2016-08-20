@@ -191,14 +191,28 @@ namespace MarbleTest.Net
                             "Expected event " + expectedNotification.Kind
                             + ", instead received at " + actualNotification.Kind);
                     }
-
-                    if (actualNotification != expectedNotification)
+                    
+                    if (actualNotification.Kind == NotificationKind.OnError)
                     {
-                        if (actualNotification.Value is IEnumerable 
-                            && expectedNotification.Value is IEnumerable 
+                        var actualException = actualNotification.Exception;
+                        var expectedException = expectedNotification.Exception;
+
+                        if (actualException.GetType() != expectedException.GetType())  // actualException.Message != expectedException.Message)
+                        {
+                            throw new Exception(
+                                "Expected OnError event " + expectedException.GetType()
+                                    + " , instead received tOnError event " + actualException.GetType());
+                        }
+
+                    } 
+                    else if (actualNotification != expectedNotification)
+                    {
+
+                        if (actualNotification.Value is IEnumerable
+                            && expectedNotification.Value is IEnumerable
                             && !(actualNotification.Value is string))
                         {
-                            var actualNotifications 
+                            var actualNotifications
                                 = ReflectionHelper.CastNotificationsFromTestableObservable(
                                     actualNotification.Value as IEnumerable);
 
@@ -207,14 +221,14 @@ namespace MarbleTest.Net
                                     expectedNotification.Value as IEnumerable);
 
                             CheckEquality(
-                                actualNotifications, 
+                                actualNotifications,
                                 expectedNotifications);
                         }
                         else
                         {
                             throw new Exception(
-                                "Expected event was " + expectedNotification 
-                                + ", instead received " + actualNotification);                            
+                                "Expected event was " + expectedNotification
+                                + ", instead received " + actualNotification);
                         }
                     }
                 }

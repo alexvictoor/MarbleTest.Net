@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Text;
@@ -111,6 +112,26 @@ namespace MarbleTest.Net.Test
         }
 
         [Test]
+        public void Should_expect_observable_on_error()
+        {
+            var source = _scheduler.CreateColdObservable<Unit>("---#", null, new Exception());
+            _scheduler.ExpectObservable(source).ToBe("---#", null, new Exception());
+
+        }
+
+        [Test]
+        public void Should_fail_when_observables_end_with_different_error_types()
+        {
+            var scheduler = new MarbleScheduler();
+            Check.ThatCode(() =>
+            {
+                var source = _scheduler.CreateColdObservable<Unit>("---#", null, new ArgumentException());
+                scheduler.ExpectObservable(source).ToBe("---#", null, new Exception());
+                scheduler.Flush();
+            }).ThrowsAny();
+        }
+
+        [Test]
         public void Should_demo_with_a_simple_operator()
         {
             var sourceEvents = _scheduler.CreateColdObservable("a-b-c-|");
@@ -172,7 +193,5 @@ namespace MarbleTest.Net.Test
             var expected = "(ab)c---d---e-|";
             _scheduler.ExpectObservable(result).ToBe(expected, new { a = aWindow, b = bWindow, c = cWindow, d = dWindow, e = eWindow });
         }
-
-
     }
 }
