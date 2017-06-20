@@ -5,14 +5,14 @@ using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
-using NFluent;
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
 
 namespace MarbleTest.Net.Test
 {
     public class ReflectionHelperTest
     {
-        [Test]
+        [Fact]
         public void Should_retrieve_property_value()
         {
             // given
@@ -20,10 +20,10 @@ namespace MarbleTest.Net.Test
             // when
             var result = ReflectionHelper.GetProperty<int>(foo, "First");
             // then
-            Check.That(result).IsEqualTo(1);
+            result.Should().Be(1);
         }
 
-        [Test]
+        [Fact]
         public void Should_detect_testable_observable_of_objects()
         {
             // given
@@ -31,10 +31,10 @@ namespace MarbleTest.Net.Test
             // when
             var result = ReflectionHelper.IsTestableObservable(cold);
             // then
-            Check.That(result).IsTrue();
+            result.Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void Should_detect_testable_observable_of_strings()
         {
             // given
@@ -42,10 +42,10 @@ namespace MarbleTest.Net.Test
             // when
             var result = ReflectionHelper.IsTestableObservable(cold);
             // then
-            Check.That(result).IsTrue();
+            result.Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void Should_detect_object_not_being_observable()
         {
             // given
@@ -53,10 +53,10 @@ namespace MarbleTest.Net.Test
             // when
             var result = ReflectionHelper.IsTestableObservable(dummy);
             // then
-            Check.That(result).IsFalse();
+            result.Should().BeFalse();
         }
 
-        [Test]
+        [Fact]
         public void Should_retrieve_notifications_from_string_testable_observable()
         {
             // given
@@ -64,25 +64,27 @@ namespace MarbleTest.Net.Test
             // when
             var notifications = ReflectionHelper.RetrieveNotificationsFromTestableObservable(cold);
             // then
-            Check.That(notifications).HasSize(1);
-            Check.That(notifications[0].Time).IsEqualTo(20);
-            Check.That(notifications[0].Value.Value).IsEqualTo("a");
+            notifications.Count.Should().Be(1);
+            notifications[0].Time.Should().Be(20);
+            notifications[0].Value.Value.Should().Be("a");
         }
 
-        [Test]
+        [Fact]
         public void Should_retrieve_completed_notification_from_testable_observable()
         {
             // given
             object cold = new MarbleScheduler().CreateColdObservable("---|");
+            
             // when
             var notifications = ReflectionHelper.RetrieveNotificationsFromTestableObservable(cold);
+
             // then
-            Check.That(notifications).HasSize(1);
-            Check.That(notifications[0].Time).IsEqualTo(30);
-            Check.That(notifications[0].Value.Kind).IsEqualTo(NotificationKind.OnCompleted);
+            notifications.Count.Should().Be(1);
+            notifications[0].Time.Should().Be(30);
+            notifications[0].Value.Kind.Should().Be(NotificationKind.OnCompleted);
         }
 
-        [Test]
+        [Fact]
         public void Should_retrieve_error_notification_from_testable_observable()
         {
             // given
@@ -90,9 +92,9 @@ namespace MarbleTest.Net.Test
             // when
             var notifications = ReflectionHelper.RetrieveNotificationsFromTestableObservable(cold);
             // then
-            Check.That(notifications).HasSize(1);
-            Check.That(notifications[0].Time).IsEqualTo(30);
-            Check.That(notifications[0].Value.Kind).IsEqualTo(NotificationKind.OnError);
+            notifications.Count.Should().Be(1);
+            notifications[0].Time.Should().Be(30);
+            notifications[0].Value.Kind.Should().Be(NotificationKind.OnError);
         }
     }
 }

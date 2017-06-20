@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reactive;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 
 namespace MarbleTest.Net
@@ -16,7 +13,7 @@ namespace MarbleTest.Net
         public static T GetProperty<T>(object o, string propName)
         {
             Type t = o.GetType();
-            PropertyInfo p = t.GetProperty(propName);
+            PropertyInfo p = t.GetRuntimeProperty(propName);
             object v = p.GetValue(o);
             return (T)v;
         }
@@ -32,7 +29,7 @@ namespace MarbleTest.Net
             }
             catch
             {
-
+                /* Empty block */
             }
             return result;
         }
@@ -70,7 +67,7 @@ namespace MarbleTest.Net
                         notification = Notification.CreateOnCompleted<object>();
                         break;
                 }
-                var record = new Recorded<Notification<object>>((long) time, notification);
+                var record = new Recorded<Notification<object>>(time, notification);
                 result.Add(record);
             }
 
