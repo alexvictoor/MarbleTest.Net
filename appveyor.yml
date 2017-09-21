@@ -8,7 +8,7 @@ test_script:
   - dotnet test
 
 after_build:
-  - dotnet publish MarbleTest.Net -o %appveyor_build_folder%\dist
+  - dotnet publish MarbleTest.Net -c release -o %appveyor_build_folder%\dist
 
 #artifacts:
 #  - path: dist
