@@ -34,14 +34,13 @@ namespace MarbleTest.Net
             return result;
         }
 
-        public static IList<Recorded<Notification<object>>> RetrieveNotificationsFromTestableObservable(
-            object testableObservable)
+        public static IList<Recorded<Notification<object>>> RetrieveNotificationsFromTestableObservable(object testableObservable)
         {
             var messages = GetProperty<IEnumerable>(testableObservable, "Messages");
             return CastNotificationsFromTestableObservable(messages);
         }
 
-        // Not very proud of this piece of code... if you find a smarter way of transforming 
+        // Not very proud of this piece of code... if you find a smarter way of transforming
         // a IList<Recorded<Notification<T>>> to a IList<Recorded<Notification<object>>>
         // please share it and send a PR :)
         public static IList<Recorded<Notification<object>>> CastNotificationsFromTestableObservable(IEnumerable messages)

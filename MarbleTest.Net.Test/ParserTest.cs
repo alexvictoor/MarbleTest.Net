@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reactive;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using FluentAssertions;
+using NFluent;
 
 namespace MarbleTest.Net.Test
 {
@@ -18,7 +13,7 @@ namespace MarbleTest.Net.Test
         {
             var result = Parser.ParseMarbles<string>("-------a---b---|", new { a = "A", b = "B" });
 
-            result.Should().ContainInOrder(new object[]
+            Check.That(result).ContainsExactly(new object[]
             {
                 new Recorded<Notification<string>>(70, Notification.CreateOnNext("A")),
                 new Recorded<Notification<string>>(110, Notification.CreateOnNext("B")),
@@ -31,7 +26,7 @@ namespace MarbleTest.Net.Test
         {
             var result = Parser.ParseMarbles<string>("--a--b--|   ", new { a = "A", b = "B" });
 
-            result.Should().ContainInOrder(new object[]
+            Check.That(result).ContainsExactly(new object[]
             {
                 new Recorded<Notification<string>>(20, Notification.CreateOnNext("A")),
                 new Recorded<Notification<string>>(50, Notification.CreateOnNext("B")),
@@ -44,7 +39,7 @@ namespace MarbleTest.Net.Test
         {
             var result = Parser.ParseMarbles<string>("---^---a---b---|", new { a = "A", b = "B" });
 
-            result.Should().ContainInOrder(new object[]
+            Check.That(result).ContainsExactly(new object[]
             {
                 new Recorded<Notification<string>>(40, Notification.CreateOnNext("A")),
                 new Recorded<Notification<string>>(80, Notification.CreateOnNext("B")),
@@ -58,7 +53,7 @@ namespace MarbleTest.Net.Test
             var errorValue = new Exception("omg error!");
             var result = Parser.ParseMarbles<string>("-------a---b---#", new { a = "A", b = "B" }, errorValue);
 
-            result.Should().ContainInOrder(new object[]
+            Check.That(result).ContainsExactly(new object[]
             {
                 new Recorded<Notification<string>>(70, Notification.CreateOnNext("A")),
                 new Recorded<Notification<string>>(110, Notification.CreateOnNext("B")),
@@ -71,7 +66,7 @@ namespace MarbleTest.Net.Test
         {
             var result = Parser.ParseMarbles<string>("--a--b--|");
 
-            result.Should().ContainInOrder(new object[]
+            Check.That(result).ContainsExactly(new object[]
             {
                 new Recorded<Notification<string>>(20, Notification.CreateOnNext("a")),
                 new Recorded<Notification<string>>(50, Notification.CreateOnNext("b")),
@@ -84,7 +79,7 @@ namespace MarbleTest.Net.Test
         {
             var result = Parser.ParseMarbles<string>("---(abc)---");
 
-            result.Should().ContainInOrder(new object[]
+            Check.That(result).ContainsExactly(new object[]
             {
                 new Recorded<Notification<string>>(30, Notification.CreateOnNext("a")),
                 new Recorded<Notification<string>>(30, Notification.CreateOnNext("b")),
@@ -97,7 +92,7 @@ namespace MarbleTest.Net.Test
         {
             var result = Parser.ParseMarbles<string>("(abc)---");
 
-            result.Should().ContainInOrder(new object[]
+            Check.That(result).ContainsExactly(new object[]
             {
                 new Recorded<Notification<string>>(0, Notification.CreateOnNext("a")),
                 new Recorded<Notification<string>>(0, Notification.CreateOnNext("b")),
@@ -110,7 +105,7 @@ namespace MarbleTest.Net.Test
         {
             var result = Parser.ParseMarbles<string>("---(abc)d--");
 
-            result.Should().ContainInOrder(new object[]
+            Check.That(result).ContainsExactly(new object[]
             {
                 new Recorded<Notification<string>>(30, Notification.CreateOnNext("a")),
                 new Recorded<Notification<string>>(30, Notification.CreateOnNext("b")),
@@ -124,8 +119,8 @@ namespace MarbleTest.Net.Test
         {
             var result = Parser.ParseMarblesAsSubscriptions("---^---!-");
 
-            result.Subscribe.Should().Be(30);
-            result.Unsubscribe.Should().Be(70);
+            Check.That(result.Subscribe).IsEqualTo(30);
+            Check.That(result.Unsubscribe).IsEqualTo(70);
         }
 
         [Fact]
@@ -133,8 +128,8 @@ namespace MarbleTest.Net.Test
         {
             var result = Parser.ParseMarblesAsSubscriptions("---^---");
 
-            result.Subscribe.Should().Be(30);
-            result.Unsubscribe.Should().Be(int.MaxValue);
+            Check.That(result.Subscribe).IsEqualTo(30);
+            Check.That(result.Unsubscribe).IsEqualTo(Int32.MaxValue);
         }
 
         [Fact]
@@ -142,8 +137,8 @@ namespace MarbleTest.Net.Test
         {
             var result = Parser.ParseMarblesAsSubscriptions("---(^!)---");
 
-            result.Subscribe.Should().Be(30);
-            result.Unsubscribe.Should().Be(30);
+            Check.That(result.Subscribe).IsEqualTo(30);
+            Check.That(result.Unsubscribe).IsEqualTo(30);
         }
     }
 }

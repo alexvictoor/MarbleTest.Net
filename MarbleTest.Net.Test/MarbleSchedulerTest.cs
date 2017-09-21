@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using NFluent;
+using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Reactive.Testing;
 using Xunit;
-using FluentAssertions;
 
 namespace MarbleTest.Net.Test
 {
@@ -22,10 +18,10 @@ namespace MarbleTest.Net.Test
             var source = scheduler.CreateColdObservable<string>("--a---b--|", new { a = "A", b = "B" });
             var i = 0;
 
-            source.Subscribe(x => x.Should().Be(expected[i++]));
+            source.Subscribe(x => Check.That(x).IsEqualTo(expected[i++]));
             scheduler.Start();
 
-            i.Should().Be(2);
+            Check.That(i).IsEqualTo(2);
             scheduler.Flush();
         }
 
@@ -37,10 +33,10 @@ namespace MarbleTest.Net.Test
             var source = scheduler.CreateHotObservable<string>("--a---b--|", new { a = "A", b = "B" });
             var i = 0;
 
-            source.Subscribe(x => x.Should().Be(expected[i++]));
+            source.Subscribe(x => Check.That(x).IsEqualTo(expected[i++]));
             scheduler.Start();
 
-            i.Should().Be(2);
+            Check.That(i).IsEqualTo(2);
             scheduler.Flush();
         }
 
@@ -49,7 +45,7 @@ namespace MarbleTest.Net.Test
         {
             var scheduler = new MarbleScheduler();
             var time = scheduler.CreateTime("-----|");
-            time.Should().Be(TimeSpan.FromTicks(50));
+            Check.That(time).IsEqualTo(TimeSpan.FromTicks(50));
             scheduler.Flush();
         }
 
@@ -59,8 +55,8 @@ namespace MarbleTest.Net.Test
             var scheduler = new MarbleScheduler();
 
             Action badMarbleInput = () => scheduler.CreateTime("-a-b-c-#");
+            Check.ThatCode(badMarbleInput).ThrowsAny();
 
-            badMarbleInput.ShouldThrow<Exception>();
             scheduler.Flush();
         }
 
@@ -103,7 +99,7 @@ namespace MarbleTest.Net.Test
                 scheduler.Flush();
             };
 
-            valueDiffer.ShouldThrow<Exception>();
+            Check.ThatCode(valueDiffer).ThrowsAny();
         }
 
         [Fact]
@@ -117,7 +113,7 @@ namespace MarbleTest.Net.Test
                 scheduler.Flush();
             };
 
-            timingDiffer.ShouldThrow<Exception>();
+            Check.ThatCode(timingDiffer).ThrowsAny();
         }
 
         [Fact]
@@ -143,7 +139,7 @@ namespace MarbleTest.Net.Test
                 scheduler.Flush();
             };
 
-            endingWithDifferentExceptionType.ShouldThrow<Exception>();
+            Check.ThatCode(endingWithDifferentExceptionType).ThrowsAny();
         }
 
         [Fact]
