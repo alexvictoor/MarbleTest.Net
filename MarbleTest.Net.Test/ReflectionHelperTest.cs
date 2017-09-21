@@ -1,5 +1,6 @@
 ﻿using NFluent;
 using System;
+using System.Linq;
 using System.Reactive;
 using Xunit;
 
@@ -84,10 +85,9 @@ namespace MarbleTest.Net.Test
             var notifications = ReflectionHelper.RetrieveNotificationsFromTestableObservable(cold);
 
             // then
-
             Check.That(notifications.Count).IsEqualTo(1);
             Check.That(notifications[0].Time).IsEqualTo(30);
-            Check.That(notifications[0].Value.Value).IsEqualTo(NotificationKind.OnCompleted);
+            Check.That(notifications[0].Value.Kind).IsEqualTo(NotificationKind.OnCompleted);
         }
 
         [Fact]
