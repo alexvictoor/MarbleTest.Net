@@ -13,10 +13,8 @@ namespace MarbleTest.Net.Test
         {
             // given
             var foo = new {First = 1, Second = 2};
-
             // when
             var result = ReflectionHelper.GetProperty<int>(foo, "First");
-
             // then
             Check.That(result).IsEqualTo(1);
         }
@@ -26,10 +24,8 @@ namespace MarbleTest.Net.Test
         {
             // given
             var cold = new MarbleScheduler().CreateColdObservable<object>("--a--", new { a = this });
-
             // when
             var result = ReflectionHelper.IsTestableObservable(cold);
-
             // then
             Check.That(result).IsTrue();
         }
@@ -39,10 +35,8 @@ namespace MarbleTest.Net.Test
         {
             // given
             var cold = new MarbleScheduler().CreateColdObservable("--a--");
-
             // when
             var result = ReflectionHelper.IsTestableObservable(cold);
-
             // then
             Check.That(result).IsTrue();
         }
@@ -52,10 +46,8 @@ namespace MarbleTest.Net.Test
         {
             // given
             var dummy = new object();
-
             // when
             var result = ReflectionHelper.IsTestableObservable(dummy);
-
             // then
             Check.That(result).IsFalse();
         }
@@ -65,10 +57,8 @@ namespace MarbleTest.Net.Test
         {
             // given
             object cold = new MarbleScheduler().CreateColdObservable("--a--");
-
             // when
             var notifications = ReflectionHelper.RetrieveNotificationsFromTestableObservable(cold);
-
             // then
             Check.That(notifications.Count).IsEqualTo(1);
             Check.That(notifications[0].Time).IsEqualTo(20);
@@ -80,10 +70,8 @@ namespace MarbleTest.Net.Test
         {
             // given
             object cold = new MarbleScheduler().CreateColdObservable("---|");
-
             // when
             var notifications = ReflectionHelper.RetrieveNotificationsFromTestableObservable(cold);
-
             // then
             Check.That(notifications.Count).IsEqualTo(1);
             Check.That(notifications[0].Time).IsEqualTo(30);
@@ -95,10 +83,8 @@ namespace MarbleTest.Net.Test
         {
             // given
             object cold = new MarbleScheduler().CreateColdObservable<object>("---#", null, new Exception("omg"));
-
             // when
             var notifications = ReflectionHelper.RetrieveNotificationsFromTestableObservable(cold);
-
             // then
             Check.That(notifications).HasSize(1);
             Check.That(notifications[0].Time).IsEqualTo(30);
