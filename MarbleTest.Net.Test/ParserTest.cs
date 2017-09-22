@@ -1,25 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reactive;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
+using Xunit;
 using NFluent;
-using NUnit.Framework;
 
 namespace MarbleTest.Net.Test
 {
     public class ParserTest
     {
-
-
-        [Test]
+        [Fact]
         public void Should_parse_a_marble_string_into_a_series_of_notifications_and_types()
         {
             var result = Parser.ParseMarbles<string>("-------a---b---|", new { a = "A", b = "B" });
-            
+
             Check.That(result).ContainsExactly(new object[]
             {
                 new Recorded<Notification<string>>(70, Notification.CreateOnNext("A")),
@@ -28,7 +21,7 @@ namespace MarbleTest.Net.Test
             });
         }
 
-        [Test]
+        [Fact]
         public void Should_parse_a_marble_string_allowing_spaces_too()
         {
             var result = Parser.ParseMarbles<string>("--a--b--|   ", new { a = "A", b = "B" });
@@ -41,7 +34,7 @@ namespace MarbleTest.Net.Test
             });
         }
 
-        [Test]
+        [Fact]
         public void Should_parse_a_marble_string_with_a_subscription_point()
         {
             var result = Parser.ParseMarbles<string>("---^---a---b---|", new { a = "A", b = "B" });
@@ -54,7 +47,7 @@ namespace MarbleTest.Net.Test
             });
         }
 
-        [Test]
+        [Fact]
         public void Should_parse_a_marble_string_with_an_error()
         {
             var errorValue = new Exception("omg error!");
@@ -68,7 +61,7 @@ namespace MarbleTest.Net.Test
             });
         }
 
-        [Test]
+        [Fact]
         public void Should_default_in_the_letter_for_the_value_if_no_value_hash_was_passed()
         {
             var result = Parser.ParseMarbles<string>("--a--b--|");
@@ -81,8 +74,7 @@ namespace MarbleTest.Net.Test
             });
         }
 
-
-        [Test]
+        [Fact]
         public void Should_handle_grouped_values()
         {
             var result = Parser.ParseMarbles<string>("---(abc)---");
@@ -95,7 +87,7 @@ namespace MarbleTest.Net.Test
             });
         }
 
-        [Test]
+        [Fact]
         public void Should_handle_grouped_values_at_zero_time()
         {
             var result = Parser.ParseMarbles<string>("(abc)---");
@@ -108,7 +100,7 @@ namespace MarbleTest.Net.Test
             });
         }
 
-        [Test]
+        [Fact]
         public void Should_handle_value_after_grouped_values()
         {
             var result = Parser.ParseMarbles<string>("---(abc)d--");
@@ -122,7 +114,7 @@ namespace MarbleTest.Net.Test
             });
         }
 
-        [Test]
+        [Fact]
         public void Should_parse_a_subscription_marble_string_into_a_subscriptionLog()
         {
             var result = Parser.ParseMarblesAsSubscriptions("---^---!-");
@@ -131,16 +123,16 @@ namespace MarbleTest.Net.Test
             Check.That(result.Unsubscribe).IsEqualTo(70);
         }
 
-        [Test]
+        [Fact]
         public void Should_parse_a_subscription_marble_without_an_unsubscription()
         {
             var result = Parser.ParseMarblesAsSubscriptions("---^---");
 
             Check.That(result.Subscribe).IsEqualTo(30);
-            Check.That(result.Unsubscribe).IsEqualTo(int.MaxValue);
+            Check.That(result.Unsubscribe).IsEqualTo(Int32.MaxValue);
         }
 
-        [Test]
+        [Fact]
         public void Should_parse_a_subscription_marble_with_a_synchronous_unsubscription()
         {
             var result = Parser.ParseMarblesAsSubscriptions("---(^!)---");
@@ -148,6 +140,5 @@ namespace MarbleTest.Net.Test
             Check.That(result.Subscribe).IsEqualTo(30);
             Check.That(result.Unsubscribe).IsEqualTo(30);
         }
-
     }
 }

@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using NFluent;
+using System;
 using System.Linq;
 using System.Reactive;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Reactive.Testing;
-using NFluent;
-using NUnit.Framework;
+using Xunit;
 
 namespace MarbleTest.Net.Test
 {
     public class ReflectionHelperTest
     {
-        [Test]
+        [Fact]
         public void Should_retrieve_property_value()
         {
             // given
@@ -23,7 +19,7 @@ namespace MarbleTest.Net.Test
             Check.That(result).IsEqualTo(1);
         }
 
-        [Test]
+        [Fact]
         public void Should_detect_testable_observable_of_objects()
         {
             // given
@@ -34,7 +30,7 @@ namespace MarbleTest.Net.Test
             Check.That(result).IsTrue();
         }
 
-        [Test]
+        [Fact]
         public void Should_detect_testable_observable_of_strings()
         {
             // given
@@ -45,7 +41,7 @@ namespace MarbleTest.Net.Test
             Check.That(result).IsTrue();
         }
 
-        [Test]
+        [Fact]
         public void Should_detect_object_not_being_observable()
         {
             // given
@@ -56,7 +52,7 @@ namespace MarbleTest.Net.Test
             Check.That(result).IsFalse();
         }
 
-        [Test]
+        [Fact]
         public void Should_retrieve_notifications_from_string_testable_observable()
         {
             // given
@@ -64,12 +60,12 @@ namespace MarbleTest.Net.Test
             // when
             var notifications = ReflectionHelper.RetrieveNotificationsFromTestableObservable(cold);
             // then
-            Check.That(notifications).HasSize(1);
+            Check.That(notifications.Count).IsEqualTo(1);
             Check.That(notifications[0].Time).IsEqualTo(20);
             Check.That(notifications[0].Value.Value).IsEqualTo("a");
         }
 
-        [Test]
+        [Fact]
         public void Should_retrieve_completed_notification_from_testable_observable()
         {
             // given
@@ -77,12 +73,12 @@ namespace MarbleTest.Net.Test
             // when
             var notifications = ReflectionHelper.RetrieveNotificationsFromTestableObservable(cold);
             // then
-            Check.That(notifications).HasSize(1);
+            Check.That(notifications.Count).IsEqualTo(1);
             Check.That(notifications[0].Time).IsEqualTo(30);
             Check.That(notifications[0].Value.Kind).IsEqualTo(NotificationKind.OnCompleted);
         }
 
-        [Test]
+        [Fact]
         public void Should_retrieve_error_notification_from_testable_observable()
         {
             // given

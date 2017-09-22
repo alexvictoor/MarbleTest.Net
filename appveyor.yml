@@ -1,6 +1,15 @@
-build:
-  project: MarbleTest.Net.sln
-before_build:
-  - appveyor DownloadFile https://dist.nuget.org/win-x86-commandline/v4.1.0/nuget.exe
-  - appveyor DownloadFile https://raw.githubusercontent.com/appveyor/ci/master/scripts/nuget-restore.cmd
-  - nuget-restore
+image: Visual Studio 2017
+
+build_script:
+  - dotnet build -c release
+
+test_script:
+  - cd MarbleTest.Net.Test
+  - dotnet test
+
+after_build:
+  - dotnet publish MarbleTest.Net -c release -o %appveyor_build_folder%\dist
+
+#artifacts:
+#  - path: dist
+#  - name: MarbleTestNuget

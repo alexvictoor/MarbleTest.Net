@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reactive;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 
 namespace MarbleTest.Net
 {
-    public class Parser
+    public static class Parser
     {
-
-
         public static Subscription ParseMarblesAsSubscriptions(string marbles, int frameTimeFactor = 10)
         {
-
             var len = marbles.Length;
             var groupStart = -1;
             var subscriptionFrame = int.MaxValue;
@@ -58,17 +51,13 @@ namespace MarbleTest.Net
                 }
             }
 
-            if (unsubscriptionFrame < 0)
-            {
-                return new Subscription(subscriptionFrame);
-            }
-            else
-            {
-                return new Subscription(subscriptionFrame, unsubscriptionFrame);
-            }
+            return unsubscriptionFrame < 0 
+                ? new Subscription(subscriptionFrame)
+                : new Subscription(subscriptionFrame, unsubscriptionFrame);
         }
 
-        public static IList<Recorded<Notification<T>>> ParseMarbles<T>(string marbles,
+        public static IList<Recorded<Notification<T>>> ParseMarbles<T>(
+            string marbles,
             object values = null,
             Exception errorValue = null,
             int frameTimeFactor = 10,
@@ -79,7 +68,7 @@ namespace MarbleTest.Net
                 throw new Exception("Conventional marble diagrams cannot have the unsubscription marker '!'");
             }
 
-            int len = marbles.Count();
+            int len = marbles.Length;
             IList<Recorded<Notification<T>>> testMessages = new List<Recorded<Notification<T>>>();
             int subIndex = marbles.IndexOf('^');
             int frameOffset = subIndex == -1 ? 0 : (subIndex * -frameTimeFactor);
@@ -139,6 +128,5 @@ namespace MarbleTest.Net
             }
             return testMessages;
         }
-
     }
 }

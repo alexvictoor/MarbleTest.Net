@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reactive;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 
 namespace MarbleTest.Net
@@ -16,7 +13,7 @@ namespace MarbleTest.Net
         public static T GetProperty<T>(object o, string propName)
         {
             Type t = o.GetType();
-            PropertyInfo p = t.GetProperty(propName);
+            PropertyInfo p = t.GetRuntimeProperty(propName);
             object v = p.GetValue(o);
             return (T)v;
         }
@@ -32,19 +29,18 @@ namespace MarbleTest.Net
             }
             catch
             {
-
+                /* Empty block */
             }
             return result;
         }
 
-        public static IList<Recorded<Notification<object>>> RetrieveNotificationsFromTestableObservable(
-            object testableObservable)
+        public static IList<Recorded<Notification<object>>> RetrieveNotificationsFromTestableObservable(object testableObservable)
         {
             var messages = GetProperty<IEnumerable>(testableObservable, "Messages");
             return CastNotificationsFromTestableObservable(messages);
         }
 
-        // Not very proud of this piece of code... if you find a smarter way of transforming 
+        // Not very proud of this piece of code... if you find a smarter way of transforming
         // a IList<Recorded<Notification<T>>> to a IList<Recorded<Notification<object>>>
         // please share it and send a PR :)
         public static IList<Recorded<Notification<object>>> CastNotificationsFromTestableObservable(IEnumerable messages)
@@ -70,7 +66,7 @@ namespace MarbleTest.Net
                         notification = Notification.CreateOnCompleted<object>();
                         break;
                 }
-                var record = new Recorded<Notification<object>>((long) time, notification);
+                var record = new Recorded<Notification<object>>(time, notification);
                 result.Add(record);
             }
 
