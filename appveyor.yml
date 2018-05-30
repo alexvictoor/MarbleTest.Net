@@ -9,7 +9,3 @@ test_script:
 
 after_build:
   - dotnet publish MarbleTest.Net -c release -o %appveyor_build_folder%\dist
-
-#artifacts:
-#  - path: dist
-#  - name: MarbleTestNuget
