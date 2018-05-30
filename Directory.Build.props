@@ -1,0 +1,9 @@
+<Project>
+    <Import Project="Common/Dependencies.props" />
+
+    <PropertyGroup>
+        <NoWarn>NU1701</NoWarn>
+        <TreatWarningAsErrors>true</TreatWarningAsErrors>
+        <WarningAsError />
+    </PropertyGroup>
+</Project>
