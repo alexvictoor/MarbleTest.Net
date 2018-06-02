@@ -6,8 +6,8 @@
             "command": "dotnet",
             "type": "process",
             "args": [
-                "build",
-                "${workspaceFolder}/MarbleTest.Net.Test/MarbleTest.Net.Test.csproj"
+                "test",
+                "${workspaceFolder}/test/MarbleTest.Net.Test/MarbleTest.Net.Test.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
