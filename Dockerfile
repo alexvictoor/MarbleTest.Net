@@ -1,18 +1,19 @@
 FROM microsoft/dotnet:2.1-sdk AS build
 WORKDIR /app
 
-# copy csproj and restore as distinct layers
-# COPY *.sln .
-# COPY src/MarbleTest.Net/MarbleTest.Net.csproj ./src/MarbleTest.Net/MarbleTest.Net.csproj
-# COPY test/MarbleTest.Net.Test/MarbleTest.Net.Test.csproj ./test/MarbleTest.Net.Test/MarbleTest.Net.Test.csproj
-# RUN cat /app/src/MarbleTest.Net/MarbleTest.Net.csproj
-# RUN cat /app/test/MarbleTest.Net.Test/MarbleTest.Net.Test.csproj
-# RUN dotnet restore
+# copy only files required for dotnet restore in order to create a distinct layers
+# if is supposed to take advantage of Docker cache per layer
+COPY *.sln .
+COPY nuget.config ./nuget.config
+COPY ./Directory.Build.props ./Directory.Build.props
+COPY ./Common/Dependencies.props ./Common/Dependencies.props
+COPY src/MarbleTest.Net/MarbleTest.Net.csproj ./src/MarbleTest.Net/MarbleTest.Net.csproj
+COPY test/MarbleTest.Net.Test/MarbleTest.Net.Test.csproj ./test/MarbleTest.Net.Test/MarbleTest.Net.Test.csproj
+RUN dotnet restore
 
 # copy everything else and build app
 COPY . .
 WORKDIR /app
-RUN cat MarbleTest.Net.sln
 RUN dotnet build
 
 
@@ -22,7 +23,7 @@ ENTRYPOINT ["dotnet", "test", "--logger:trx"]
 
 
 FROM build AS test
-WORKDIR /app/test
+WORKDIR /app/test/MarbleTest.Net.Test
 RUN dotnet test
 
 
