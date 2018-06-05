@@ -7,8 +7,8 @@ COPY *.sln .
 COPY nuget.config ./nuget.config
 COPY ./Directory.Build.props ./Directory.Build.props
 COPY ./Common/Dependencies.props ./Common/Dependencies.props
-COPY src/MarbleTest.Net/MarbleTest.Net.csproj ./src/MarbleTest.Net/MarbleTest.Net.csproj
-COPY test/MarbleTest.Net.Test/MarbleTest.Net.Test.csproj ./test/MarbleTest.Net.Test/MarbleTest.Net.Test.csproj
+COPY MarbleTest.Net/MarbleTest.Net.csproj ./MarbleTest.Net/MarbleTest.Net.csproj
+COPY MarbleTest.Net.Test/MarbleTest.Net.Test.csproj ./MarbleTest.Net.Test/MarbleTest.Net.Test.csproj
 RUN dotnet restore
 
 # copy everything else and build app
@@ -18,12 +18,12 @@ RUN dotnet build
 
 
 FROM build AS testrunner
-WORKDIR /app/test
+WORKDIR /app/MarbleTest.Net.Test
 ENTRYPOINT ["dotnet", "test", "--logger:trx"]
 
 
 FROM build AS test
-WORKDIR /app/test/MarbleTest.Net.Test
+WORKDIR /app/MarbleTest.Net.Test
 RUN dotnet test
 
 

@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "test",
-                "${workspaceFolder}/test/MarbleTest.Net.Test/MarbleTest.Net.Test.csproj"
+                "${workspaceFolder}/MarbleTest.Net.Test/MarbleTest.Net.Test.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
