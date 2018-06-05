@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26906.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarbleTest.Net", "MarbleTest.Net\MarbleTest.Net.csproj", "{0BB0B4C0-EE51-4B42-B3C4-C477D6631201}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarbleTest.Net", "MarbleTest.Net/MarbleTest.Net.csproj", "{0BB0B4C0-EE51-4B42-B3C4-C477D6631201}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarbleTest.Net.Test", "MarbleTest.Net.Test\MarbleTest.Net.Test.csproj", "{05360F99-ABA4-40A4-9469-ECD4CEC36B6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarbleTest.Net.Test", "MarbleTest.Net.Test/MarbleTest.Net.Test.csproj", "{05360F99-ABA4-40A4-9469-ECD4CEC36B6C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{93B5150A-7D2A-4106-9531-DB24E48F4D4F}"
 	ProjectSection(SolutionItems) = preProject
