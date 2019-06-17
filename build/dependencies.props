@@ -1,0 +1,12 @@
+<Project>
+    <PropertyGroup>
+        <SystemReactivePackageVersion>[4.*,)</SystemReactivePackageVersion>
+        <MicrosoftReactiveTestingPackageVersion>$(SystemReactivePackageVersion)</MicrosoftReactiveTestingPackageVersion>
+
+        <MicrosoftNetTestSdkPackageVersion>[16.*,)</MicrosoftNetTestSdkPackageVersion>
+        <NFluentPackageVersion>[2.*,)</NFluentPackageVersion>
+        <NSubstitutePackageVersion>[4.*,)</NSubstitutePackageVersion>
+        <XUnitPackageVersion>[2.*,)</XUnitPackageVersion>
+        <XUnitRunnerVisualStudioPackageVersion>$(XUnitPackageVersion)</XUnitRunnerVisualStudioPackageVersion>
+    </PropertyGroup>
+</Project>

@@ -1,7 +1,8 @@
 <Project>
-    <Import Project="Common/Dependencies.props" />
+    <Import Project="build/dependencies.props" />
 
     <PropertyGroup>
+        <LangVersion>latest</LangVersion>
         <NoWarn>NU1701</NoWarn>
         <TreatWarningAsErrors>true</TreatWarningAsErrors>
         <WarningAsError />
