@@ -1,4 +1,4 @@
-image: .NET Core 2.2.4 runtime
+image: .NET Core 3.0.0-preview-27122-01
 
 build_script:
   - dotnet build -c release
