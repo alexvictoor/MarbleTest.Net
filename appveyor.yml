@@ -1,4 +1,4 @@
-image: Visual Studio 2017
+image: .NET Core 2.2.4 runtime
 
 build_script:
   - dotnet build -c release
